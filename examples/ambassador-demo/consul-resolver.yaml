@@ -1,0 +1,7 @@
+apiVersion: getambassador.io/v2
+kind: ConsulResolver
+metadata:
+  name: consul-dc1
+spec:
+  address: https://rp-uecxgqdp-dc1.private.consul.6f656329-aa6d-4777-b0e1-68927dac2aec.aws.hashicorp.cloud
+  datacenter: rp-uecxgqdp-dc1

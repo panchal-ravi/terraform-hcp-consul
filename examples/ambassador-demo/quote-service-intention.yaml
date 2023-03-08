@@ -1,0 +1,11 @@
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: quote-connect
+spec:
+  destination:
+    name: quote-connect
+  sources:
+    - name: "*"
+      action: allow

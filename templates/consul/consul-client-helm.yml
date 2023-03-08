@@ -1,0 +1,72 @@
+global:
+  enabled: false
+  name: "client1"
+  # name: ${partition_name}
+  logLevel: debug
+  image: "hashicorp/consul-enterprise:${consul_version}"
+  peering:
+    enabled: true
+  adminPartitions:
+    enabled: true
+    name: default
+    # name: ${partition_name}
+  datacenter: ${datacenter}
+  gossipEncryption:
+    secretName: consul-gossip-encryption-key
+    secretKey: key
+  tls:
+    enabled: true
+    # enableAutoEncrypt: true
+    caCert:
+      secretName: consul-ca-cert
+      secretKey: tls.crt
+  acls:
+    manageSystemACLs: true
+    bootstrapToken:
+      secretName: consul-bootstrap-token
+      secretKey: token
+  enableConsulNamespaces: true
+  # enterpriseLicense:
+  #   secretName: consul-ent-license
+  #   secretKey: key
+externalServers:
+  enabled: true
+  hosts: [${consul_server_fqdn}]
+  # tlsServerName: server.${datacenter}.consul
+  useSystemRoots: true
+  httpsPort: 443
+  k8sAuthMethodHost: ${cluster_api_endpoint}
+dns:
+  enabled: true
+  enableRedirection: true
+ui:
+  enabled: true
+connectInject:
+  enabled: true
+  # envoyExtraArgs: "--log-level debug"
+  consulNamespaces:
+    mirroringK8S: true
+  namespaceSelector: |
+    matchLabels:
+      consul: enabled
+ingressGateways:
+  enabled: true
+  defaults:
+    replicas: ${replicas}
+    service:
+      type: LoadBalancer
+      ports:
+        - port: 80
+# client:
+#   enabled: true
+#   exposeGossipPorts: false
+#   join: [${consul_server_fqdn}]
+meshGateway:
+  enabled: true
+  replicas: 1
+terminatingGateways:
+  enabled: true
+  defaults:
+    replicas: ${replicas}
+  gateways:
+    - name: https-terminating-gateway
